@@ -1,0 +1,74 @@
+import java.io.*;
+
+class Product implements Serializable {
+    private static final long serialVersionUID = 1L;
+    private int id;
+    private String name;
+    private String category;
+    private double price;
+
+    // Constructor
+    public Product(int id, String name, String category, double price) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.price = price;
+    }
+
+    // Getter methods
+    public int getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+}
+
+public class Deserialize {
+    public static void main(String[] args) {
+        // Serialize the Product object
+        serializeProduct();
+
+        // Deserialize the Product object
+        Product product = deserializeProduct();
+        if (product != null) {
+            System.out.println("Deserialized Product Details:");
+            System.out.println("ID: " + product.getId());
+            System.out.println("Name: " + product.getName());
+            System.out.println("Category: " + product.getCategory());
+            System.out.println("Price: " + product.getPrice());
+        }
+    }
+
+    // Method to serialize the Product object
+    private static void serializeProduct() {
+        try (ObjectOutputStream outputStream = new ObjectOutputStream(new FileOutputStream("product.ser"))) {
+            Product product = new Product(1, "Book", "Classic", 50.0);
+            outputStream.writeObject(product);
+            System.out.println("Product serialized successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Method to deserialize the Product object
+    private static Product deserializeProduct() {
+        try (ObjectInputStream inputStream = new ObjectInputStream(new FileInputStream("product.ser"))) {
+            Product product = (Product) inputStream.readObject();
+            System.out.println("Product deserialized successfully.");
+            return product;
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
